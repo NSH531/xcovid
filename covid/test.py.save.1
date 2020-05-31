@@ -1,0 +1,82 @@
+import os
+import tensorflow as tf
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+import numpy as np
+from keras.models import Model
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import load_model
+
+class TestCovidNet:
+    def __init__(self):
+        self.model = None
+
+    @staticmethod
+    def imagenet_preproc(x):
+        x = x / 255.0
+        x = x - [0.485, 0.456, 0.406]
+        x = x / [0.229, 0.224, 0.225]
+        return x
+
+    def test():
+        import fnmatch
+        import os
+
+        test_data_path = "data/"
+        input_size = 224
+        batch_size = 1
+        weights_path = "weights/"
+        testcovidnet = TestCovidNet()
+        test_datagen = ImageDataGenerator(horizontal_flip=True, preprocessing_function=testcovidnet.imagenet_preproc)
+        test_generator = test_datagen.flow_from_directory(
+            test_data_path,
+            classes=['test'],
+            target_size=(input_size, input_size),
+            batch_size=batch_size,
+            class_mode='binary',
+            shuffle=False)
+        model = load_model(weights_path + 'model4.h5')
+        model.layers.pop()
+        predictions = model.predict_generator(test_generator, steps=len(test_generator), verbose=0)
+        #classes = list(np.argmax(predictions, axis=1))
+        filenames = test_generator.filenames
+        answer = []
+        answer.append('hello')
+        covid=0
+        normal=0
+        import fnmatch
+        import os
+        j=0
+        x=[]
+        res=[]
+        q=0
+        r=0
+        for file in os.listdir(test_data_path):
+            j=j+1 
+            if (file.find('(COVID)')) >= 0:
+               x.append(j)                 
+        for a in list(x):
+            res.append(filenames[a]+"  -  "+str((predictions[a])[0]))
+            q=q+1
+            r=r+(predictions[a])[0]
+        return res
+       # for i in list(predictions):
+       #        if (i[0]>0.8) :
+       #            answer.append('covid19')
+       #        elif (i[0]<0.2) :
+       #            answer.append('normal')
+       #        else :
+       #            answer.append(str(i[0])
+
+           # if (i[0] < 0.2):
+           #     string ="Normal"
+           #     answer.append(string)
+           # elif (i[0] > 0.8):
+           #     string ="Covid detected"
+           #     answer.append(string)
+           # else:
+           #     string =  "Suspicion of Covid"
+           #     answer.append(string)
+      
+if __name__ == '__main__':
+    predictions = TestCovidNet.test()
+    print(predictions)

@@ -133,7 +133,7 @@ if __name__ == '__main__':
     train_data_path = "data/train/"
     val_data_path = "data/val/"
     class_map = {0:'normal', 1:'covid19',2:'pneumonia'}
-    epochs =   100
+    epochs =   30
     weights_path = "weights/"
 
     trainchexnet = TrainCheXNet()

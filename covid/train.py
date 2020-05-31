@@ -66,7 +66,7 @@ class TrainCheXNet:
         self.model = Model(inputs=input, outputs=x)
 
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam',  loss=tf.keras.losses.CategoricalCrossentropy())
+        self.model.compile(optimizer='adam',  loss='categorical_hinge')
         return self.model
 
     @staticmethod
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     train_data_path = "data/train/"
     val_data_path = "data/val/"
     class_map = {0:'normal', 1:'covid19',2:'pneumonia'}
-    epochs =   30
+    epochs =   13
     weights_path = "weights/"
 
     trainchexnet = TrainCheXNet()

@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "test.py", line 54, in <module>
+    predictions = TestCovidNet.test()
+  File "test.py", line 34, in test
+    model = load_model(weights_path + 'model16.h5')
+  File "/usr/local/lib/python3.6/site-packages/keras/engine/saving.py", line 492, in load_wrapper
+    return load_function(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/keras/engine/saving.py", line 584, in load_model
+    model = _deserialize_model(h5dict, custom_objects, compile)
+  File "/usr/local/lib/python3.6/site-packages/keras/engine/saving.py", line 369, in _deserialize_model
+    sample_weight_mode=sample_weight_mode)
+  File "/usr/local/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py", line 75, in symbolic_fn_wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/keras/engine/training.py", line 229, in compile
+    self.total_loss = self._prepare_total_loss(masks)
+  File "/usr/local/lib/python3.6/site-packages/keras/engine/training.py", line 692, in _prepare_total_loss
+    y_true, y_pred, sample_weight=sample_weight)
+  File "/usr/local/lib/python3.6/site-packages/keras/losses.py", line 73, in __call__
+    losses, sample_weight, reduction=self.reduction)
+  File "/usr/local/lib/python3.6/site-packages/keras/utils/losses_utils.py", line 156, in compute_weighted_loss
+    Reduction.validate(reduction)
+  File "/usr/local/lib/python3.6/site-packages/keras/utils/losses_utils.py", line 35, in validate
+    raise ValueError('Invalid Reduction Key %s.' % key)
+ValueError: Invalid Reduction Key auto.

@@ -15,6 +15,11 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 import glob
 
 class TrainCheXNet:
+    def kullback_leibler_divergence(y_true, y_pred):
+        y_true = K.clip(y_true, K.epsilon(), 1)
+        y_pred = K.clip(y_pred, K.epsilon(), 1)
+        return K.sum(y_true * K.log(y_true / y_pred), axis=-1)
+
     def __init__(self):
         # Final dense layer will have single output since this is binary classification problem
         self.output_classes = 3
@@ -66,7 +71,7 @@ class TrainCheXNet:
         self.model = Model(inputs=input, outputs=x)
 
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam',  loss='squared_hinge')
+        self.model.compile(optimizer='adam',  loss=TrainCheXNet.kullback_leibler_divergence(y_true,y_pred))
         return self.model
 
     @staticmethod

@@ -16,6 +16,9 @@ import glob
 
 class TrainCheXNet:
     def kullback_leibler_divergence(y_true, y_pred):
+    self.input = Input(shape=(self.input_size, self.input_size, 3))
+    def kullback_leibler_divergence(y_true):
+        y_pred = clf.predict(y_true)
         y_true = K.clip(y_true, K.epsilon(), 1)
         y_pred = K.clip(y_pred, K.epsilon(), 1)
         return K.sum(y_true * K.log(y_true / y_pred), axis=-1)
@@ -71,7 +74,7 @@ class TrainCheXNet:
         self.model = Model(inputs=input, outputs=x)
 
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam',  loss=TrainCheXNet.kullback_leibler_divergence(y_true,y_pred))
+        self.model.compile(optimizer='adam',  loss=kullback_leibler_divergence(self.input))
         return self.model
 
     @staticmethod

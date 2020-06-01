@@ -16,19 +16,31 @@ import glob
 
 class TrainCheXNet:
     def kullback_leibler_divergence(y_true, y_pred):
-    self.input = Input(shape=(self.input_size, self.input_size, 3))
+
     def kullback_leibler_divergence(y_true):
-        y_pred = clf.predict(y_true)
+        from sklearn import svm,datasets
+        y_pred=None
+        from numpy import array
+        import numpy as np
+        if(y_pred==None):
+
+           y_pred=array(np.int32,tf.math.count_nonzero(y_true))
+           for i in y_pred:
+                y_pred.append(random.random())
+        
         y_true = K.clip(y_true, K.epsilon(), 1)
         y_pred = K.clip(y_pred, K.epsilon(), 1)
         return K.sum(y_true * K.log(y_true / y_pred), axis=-1)
 
     def __init__(self):
+        self.input_size = 224
+
+        self.input = Input(shape=(self.input_size, self.input_size, 3))
+
         # Final dense layer will have single output since this is binary classification problem
         self.output_classes = 3
 
         # Following hyper-params are set as per the paper
-        self.input_size = 224
         self.batch_size = 1
         self.decay_factor = 1.0/10.0
 
@@ -74,7 +86,7 @@ class TrainCheXNet:
         self.model = Model(inputs=input, outputs=x)
 
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam',  loss=kullback_leibler_divergence(self.input))
+        self.model.compile(optimizer='adam',  loss=TrainCheXNet.kullback_leibler_divergence(self.input))
         return self.model
 
     @staticmethod

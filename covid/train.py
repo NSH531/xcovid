@@ -22,12 +22,11 @@ class TrainCheXNet:
         y_pred=None
         from numpy import array
         import numpy as np
+        q=()
         if(y_pred==None):
-
-           y_pred=array(np.int32,tf.math.count_nonzero(y_true))
-           for i in y_pred:
-                y_pred.append(random.random())
-        
+           for i in y_true:
+             q.add(random.random())
+           y_pred=np.vstack(q)
         y_true = K.clip(y_true, K.epsilon(), 1)
         y_pred = K.clip(y_pred, K.epsilon(), 1)
         return K.sum(y_true * K.log(y_true / y_pred), axis=-1)

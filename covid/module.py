@@ -4,36 +4,8 @@ import itertools
 import warnings
 
 import torch
-from ..parameter import Parameter
+from parameter import Parameter
 import torch.utils.hooks as hooks
-
-class _IncompatibleKeys(namedtuple('IncompatibleKeys', ['missing_keys', 'unexpected_keys'])):
-    def __repr__(self):
-        if not self.missing_keys and not self.unexpected_keys:
-            return '<All keys matched successfully>'
-        return super(_IncompatibleKeys, self).__repr__()
-
-    __str__ = __repr__
-
-
-class ModuleAttributeError(AttributeError):
-    """ When `__getattr__` raises AttributeError inside a property,
-    AttributeError is raised with the property name instead of the
-    attribute that initially raised AttributeError, making the error
-    message uninformative. Using `ModuleAttributeError` instead
-    fixes this issue."""
-
-
-def _addindent(s_, numSpaces):
-    s = s_.split('\n')
-    # don't do anything for single-line stuff
-    if len(s) == 1:
-        return s_
-    first = s.pop(0)
-    s = [(numSpaces * ' ') + line for line in s]
-    s = '\n'.join(s)
-    s = first + '\n' + s
-    return s
 
 
 class Module(object):
@@ -1219,3 +1191,4 @@ class Module(object):
         replica._is_replica = True
 
         return replica
+

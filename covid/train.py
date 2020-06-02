@@ -15,20 +15,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 import glob
 
 class TrainCheXNet:
-    def kullback_leibler_divergence(y_true):
-        from sklearn import svm,datasets
-        y_pred=None
-        
-        from numpy import array
 
-        if(y_pred==None):
-           y_pred=array(224,224)
-           for i in y_pred:
-                y_pred.append(random.random())
-        
-        y_true = K.clip(y_true, K.epsilon(), 1)
-        y_pred = K.clip(y_pred, K.epsilon(), 1)
-        return K.sum(y_true * K.log(y_true / y_pred), axis=-1)
 
     def __init__(self):
         self.input_size = 224
@@ -84,7 +71,7 @@ class TrainCheXNet:
         self.model = Model(inputs=input, outputs=x)
 
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam',  loss=TrainCheXNet.kullback_leibler_divergence(self.input))
+        self.model.compile(optimizer='adam',  loss=tf.keras.losses.BinaryCrossentropy(from_logits=True))
         return self.model
 
     @staticmethod

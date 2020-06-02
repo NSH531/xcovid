@@ -13,7 +13,7 @@ from keras.layers import Dense, Input, GlobalAveragePooling2D
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 import glob
-from BCEWithLogitsLoss import BCEWithLogitsLoss
+#from BCEWithLogitsLoss import BCEWithLogitsLoss
 class TrainCheXNet:
 
 
@@ -58,10 +58,6 @@ class TrainCheXNet:
 
         self.train_steps = (sum(cls_cnts) // self.batch_size) + 1
         self.val_steps = (val_img_cnt // self.val_batch_size) + 1
-    def lossA(y_true,y_pred):
-        input=y_true
-        output=y_pred
-        return BCEWithLogitsLoss(input,output)
     def get_model(self):
         # DenseNet121 expects number of channels to be 3
         input = Input(shape=(self.input_size, self.input_size, 3))
@@ -72,9 +68,10 @@ class TrainCheXNet:
         x = Dense(self.output_classes, activation='sigmoid')(x)
 
         self.model = Model(inputs=input, outputs=x)
-
+            
+        xent = tf.keras.losses.BinaryCrossentropy(from_logits=True,reductiontf.keras.losses.Reduction.NONE)
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam',  loss=TrainCheXNet.lossA)
+        self.model.compile(optimizer='adam', loss = tf.reduce_mean(xent(input, x) * weights))
         return self.model
 
     @staticmethod

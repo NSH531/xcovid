@@ -1,3 +1,6 @@
+from module import Module
+import functional as F
+import _reduction as _Reduction
 class BCEWithLogitsLoss:
     r"""This loss combines a `Sigmoid` layer and the `BCELoss` in one single
     class. This version is more numerically stable than using a plain `Sigmoid`

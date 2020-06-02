@@ -69,7 +69,7 @@ class TrainCheXNet:
 
         self.model = Model(inputs=input, outputs=x)
             
-        xent = tf.keras.losses.BinaryCrossentropy(from_logits=True,reductiontf.keras.losses.Reduction.NONE)
+        xent = tf.keras.losses.BinaryCrossentropy(from_logits=False,reduction=tf.keras.losses.Reduction.NONE)
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
         self.model.compile(optimizer='adam', loss = tf.reduce_mean(xent(input, x) * weights))
         return self.model
@@ -99,15 +99,15 @@ class TrainCheXNet:
             train_data_path,
            # classes=class_names,
             target_size=(self.input_size, self.input_size),
-            batch_size=self.batch_size)
-           # class_mode='binary')
+            batch_size=self.batch_size,
+            class_mode='categorical')
         val_datagen = ImageDataGenerator(preprocessing_function=self.imagenet_preproc)
         val_generator = val_datagen.flow_from_directory(
             val_data_path,
            # classes=class_names,
             target_size=(self.input_size, self.input_size),
-            batch_size=self.val_batch_size
-           # class_mode='binary'
+            batch_size=self.val_batch_size,
+            class_mode='categorical'
 )
 
         # Paper suggests following:

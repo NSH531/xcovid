@@ -42,6 +42,10 @@ class TestCovidNet:
             answer.append(filenames[i])
             if(predictions[i][2]>0.4):
                 answer.append('pneumonia')
+            elif (predictions[i][1]>0.4):
+                answer.append('covid19')
+            else:
+                answer.append('normal')
 
             answer.append(predictions[i])
         return answer

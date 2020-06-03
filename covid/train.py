@@ -71,7 +71,7 @@ class TrainCheXNet:
             
         xent = tf.keras.losses.BinaryCrossentropy(from_logits=False,reduction=tf.keras.losses.Reduction.NONE)
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam', loss='categorical_crossentropy')
+        self.model.compile(optimizer='adam', loss='categorical_hinge')
         return self.model
 
     @staticmethod
@@ -115,7 +115,7 @@ class TrainCheXNet:
         # time the validation loss plateaus after an epoch
         # 2. pick the model with the lowest validation loss
 
-        checkpoint = ModelCheckpoint(weights_path + 'model16.h5', monitor='val_loss', verbose=1,
+        checkpoint = ModelCheckpoint(weights_path + 'model17.h5', monitor='val_loss', verbose=1,
                                      save_best_only=True, mode='min')
         reduceLROnPlat = ReduceLROnPlateau(monitor='val_loss', factor=self.decay_factor)
 
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     if (args.weights == 'imagenet'):
         model = trainchexnet.get_model()
     elif (args.weights == 'last'):
-        model = load_model(weights_path + 'model16.h5')
+        model = load_model(weights_path + 'model17.h5')
 
     # Train the model
     trainchexnet.train(train_data_path, val_data_path, epochs, weights_path)

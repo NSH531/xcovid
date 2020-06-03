@@ -29,7 +29,7 @@ class TestCovidNet:
             classes=['test'],
             target_size=(input_size, input_size),
             batch_size=batch_size,
-           # class_mode='binary',
+            class_mode='categorical',
             shuffle=False)
         model = load_model(weights_path + 'model16.h5')
         model.layers.pop()
@@ -38,17 +38,12 @@ class TestCovidNet:
         filenames = test_generator.filenames
         answer = []
         for i in range(len(filenames)):
-            if ((predictions[i])[0] < 0.33):
-                string = str(filenames[i]) + " - Normal"+" - "+str(predictions[i][0])
-                answer.append(string)
-            elif ((predictions[i])[0] >= 0.67):
-                string = str(filenames[i]) + " - pneumonia" + " -  " +str(predictions[i][0])
- 
-                answer.append(string)
-            else:
-                string = str(filenames[i]) + " -Covid"  + " - "+str(predictions[i][0])
+         
+            answer.append(filenames[i])
+            if(predictions[i][2]>0.4):
+                answer.append('pneumonia')
 
-                answer.append(string)
+            answer.append(predictions[i])
         return answer
 if __name__ == '__main__':
     predictions = TestCovidNet.test()

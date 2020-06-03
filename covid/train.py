@@ -71,7 +71,7 @@ class TrainCheXNet:
             
         xent = tf.keras.losses.BinaryCrossentropy(from_logits=False,reduction=tf.keras.losses.Reduction.NONE)
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
-        self.model.compile(optimizer='adam', loss = tf.reduce_mean(xent(input, x) * weights))
+        self.model.compile(optimizer='adam', loss='categorical_crossentropy')
         return self.model
 
     @staticmethod

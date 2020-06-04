@@ -31,24 +31,27 @@ class TestCovidNet:
             batch_size=batch_size,
             class_mode='categorical',
             shuffle=False)
-        model = load_model(weights_path + 'model16.h5')
+        model = load_model(weights_path + 'model17.h5')
         model.layers.pop()
         predictions = model.predict_generator(test_generator, steps=len(test_generator), verbose=0)
         classes = list(np.argmax(predictions, axis=1))
         filenames = test_generator.filenames
+        q='\n\n'
         answer = []
         for i in range(len(filenames)):
-         
-            answer.append(filenames[i])
+            q=q+'\n'
+            answer.append('\n')
+            q=q+str(filenames[i])
             if(predictions[i][2]>0.4):
-                answer.append('pneumonia')
+                q=q+'\tpneumonia\t'
+                q=q+str(predictions[i][2])
             elif (predictions[i][1]>0.4):
-                answer.append('covid19')
+                q=q+'\tcovid19\t'
+                q=q+str(predictions[i][1])
             else:
-                answer.append('normal')
-
-            answer.append(predictions[i])
-        return answer
+                q=q+'\tnormal\t'+str(predictions[i][0])
+            #q=q+predictions[i]
+        return q
 if __name__ == '__main__':
     predictions = TestCovidNet.test()
     print(predictions)

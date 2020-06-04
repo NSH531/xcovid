@@ -91,14 +91,10 @@ class BCEWithLogitsLoss:
         >>> output.backward()
     """
     def __init__(self, weight=None, size_average=None, reduce=None, reduction='mean', pos_weight=None):
-        super(BCEWithLogitsLoss, self).__init__(size_average, reduce, reduction)
-        self.register_buffer('weight', weight)
-        self.register_buffer('pos_weight', pos_weight)
-
+        #super(BCEWithLogitsLoss, self).__init__(size_average, reduce, reduction)
+        #Module.register_buffer('weight', weight)
+        #Module.register_buffer('pos_weight', pos_weight)
     def forward(self, input, target):
-        return F.binary_cross_entropy_with_logits(input, target,
-                                                  self.weight,
-                                                  pos_weight=self.pos_weight,
-                                                  reduction=self.reduction)
+        return F.binary_cross_entropy_with_logits(input, target,self.weight,pos_weight=self.pos_weight,reduction=self.reduction)
 
 

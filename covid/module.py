@@ -17,7 +17,7 @@ class Module(object):
     a tree structure. You can assign the submodules as regular attributes::
 
         import torch.nn as nn
-        import torch.nn.functional as F
+        import functional as F
 
         class Model(nn.Module):
             def __init__(self):

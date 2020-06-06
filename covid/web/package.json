@@ -4,11 +4,17 @@
   "description": "this application shows data from ai system",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "covid"
   ],
   "author": "netanel stern",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "npm-cli": "^0.1.0",
+    "start": "^5.1.0"
+  }
 }

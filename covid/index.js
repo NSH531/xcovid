@@ -1,11 +1,21 @@
-    const Server=require('node-http-server').Server;
+const server=require('node-http-server');
  
-    class MyCustomServer extends Server{
-      constructor(){
-        super();
-      }
-    }
+server.deploy(
+    {
+        port:8000,
+        root:'~/myApp/'
+    },
+    serverReady
+);
  
-    const server=new MyCustomServer;
-    server.deploy();
+server.deploy(
+    {
+        port:8888,
+        root:'~/myOtherApp/'
+    },
+    serverReady
+);
  
+function serverReady(server){
+   console.log( `Server on port ${server.config.port} is now up`);
+}

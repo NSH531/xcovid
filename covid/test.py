@@ -55,3 +55,4 @@ class TestCovidNet:
 if __name__ == '__main__':
     predictions = TestCovidNet.test()
     print(predictions)
+    return predictions

@@ -1,17 +1,17 @@
-
-let {PythonShell}= require('python-shell');
 const express = require('express')
 const app = express()
 const port = 80
 app.get('/data', call);
 function call(req, res) {
-let pyshell = new PythonShell('test.py', function (err, results) {
-  if (err) throw err;
-  // results is an array consisting of messages collected during execution
-  res.send('results: %j', results);
+const { execFile } = require('child_process');
+const child = execFile('python3', ['J.PY'], (error, stdout, stderr) => {
+  if (error) {
+    throw error;
+  }
+  res.send(stdout);
 });
- };
 
+ };
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

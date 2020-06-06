@@ -13,6 +13,7 @@
   "author": "netanel stern",
   "license": "ISC",
   "dependencies": {
+    "exec": "^0.2.1",
     "express": "^4.17.1",
     "npm-cli": "^0.1.0",
     "start": "^5.1.0"

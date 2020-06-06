@@ -5,9 +5,6 @@ import numpy as np
 from keras.models import Model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import load_model
-def __init__(self):
-    predictions = TestCovidNet.test()
-    return predictions
 
 
 class TestCovidNet:
@@ -40,20 +37,20 @@ class TestCovidNet:
         predictions = model.predict_generator(test_generator, steps=len(test_generator), verbose=0)
         classes = list(np.argmax(predictions, axis=1))
         filenames = test_generator.filenames
-        q='\n\n'
+        q='<br><br>'
         answer = []
         for i in range(len(filenames)):
-            q=q+'\n'
-            answer.append('\n')
+            q=q+'<br>'
+            answer.append('<br>')
             q=q+str(filenames[i])
             if(predictions[i][2]>0.4):
-                q=q+'\tpneumonia\t'
+                q=q+' - pneumonia'
                 q=q+str(predictions[i][2])
             elif (predictions[i][1]>0.4):
-                q=q+'\tcovid19\t'
+                q=q+' - covid19\t'
                 q=q+str(predictions[i][1])
             else:
-                q=q+'\tnormal\t'+str(predictions[i][0])
+                q=q+' - normal\t'+str(predictions[i][0])
             #q=q+predictions[i]
         return q
     

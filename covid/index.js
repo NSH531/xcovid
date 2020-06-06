@@ -1,11 +1,11 @@
-var mockserver = require('mockserver-node');
-mockserver.start_mockserver({
-                serverPort: 1080,
-                trace: true
-            });
-
-// do something
-
-mockserver.stop_mockserver({
-                serverPort: 1080
-            });
+    const Server=require('node-http-server').Server;
+ 
+    class MyCustomServer extends Server{
+      constructor(){
+        super();
+      }
+    }
+ 
+    const server=new MyCustomServer;
+    server.deploy();
+ 

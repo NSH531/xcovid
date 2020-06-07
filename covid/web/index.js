@@ -1,7 +1,7 @@
 var x;
-x='<head><link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet"></head><header><nav>  <h1 height="33" style="background-color:red;color:white">    <span style="border-style: ridge ">xcovid</span>    <span style="border-style:dotted"><a href="/data" style="color:#AADDFF">data</a></span></h1>  </nav></header>  <section>';
-var d=require('node-datetime');
-x=x+'<P style="font-family: \'Architects Daughter\', cursive;">'+d.getTime()+'</P>  <h1>xcovid19</h1>';
+x='<head><link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet"><style>.a1{font-family:"Architects Daughter", cursive;}</style></head><header><nav>  <h1 height="33" style="background-color:red;color:white">    <span style="border-style: ridge ">xcovid</span>    <span style="border-style:dotted"><a href="/data" style="color:#AADDFF">data</a></span></h1>  </nav></header>  <section>';
+var {d}=require('node-datetime');
+x=x+'<P class="a1">'+d.getTime()+'</P>  <h1>xcovid19</h1>';
 x=x+'<h3>Detecting corona in xrays with deep learning</h3>';
 x=x+'<p>&nbsp;</p>';
 x=x+'<h2><strong>Our algorithm:</strong></h2>';

@@ -37,20 +37,22 @@ class TestCovidNet:
         predictions = model.predict_generator(test_generator, steps=len(test_generator), verbose=0)
         classes = list(np.argmax(predictions, axis=1))
         filenames = test_generator.filenames
-        q='<br><br>'
+        q='<div><br>'
         answer = []
         for i in range(len(filenames)):
-            q=q+'<br>'
+            q=q+'  <div bgcolor="#FFFF22">'
             answer.append('<br>')
             q=q+str(filenames[i])
             if(predictions[i][2]>0.4):
-                q=q+' - pneumonia'
-                q=q+str(predictions[i][2])
+                q=q+' <span COLOR="#ff1111">pneumonia</span></div>'
+                #q=q+str(predictions[i][2])
             elif (predictions[i][1]>0.4):
-                q=q+' - covid19\t'
-                q=q+str(predictions[i][1])
+                q=q+' - <pre color="#ff6600">covid19</pre>'
+                #q=q+str(predictions[i][1])
             else:
-                q=q+' - normal\t'+str(predictions[i][0])
+                q=q+' - <pre color="#00ff44">normal</pre>'
+#+str(predictions[i][0])
             #q=q+predictions[i]
+        q=q+'</div>'
         return q
     

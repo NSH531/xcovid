@@ -37,7 +37,8 @@ class TestCovidNet:
         predictions = model.predict_generator(test_generator, steps=len(test_generator), verbose=0)
         classes = list(np.argmax(predictions, axis=1))
         filenames = test_generator.filenames
-        q='<div><br>'
+        q='<header><nav>  <h1 height="33" style="background-color:red;color:white">    <span style="border-style: ridge ">xcovid</span>    <span style="border-style:dotted"><a href="/data" style="color:#AADDFF">data</a></span></h1>  </nav></header>  <section>'        
+        q=q+'<div><br>'
         answer = []
         for i in range(len(filenames)):
             q=q+'  <div bgcolor="#FFFF22">'

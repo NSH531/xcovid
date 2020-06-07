@@ -1,6 +1,6 @@
 {
-  "name": "web",
-  "version": "1.0.0",
+  "name": "netanels",
+  "version": "1.0.7974",
   "description": "this application shows data from ai system",
   "main": "index.js",
   "scripts": {
@@ -17,5 +17,6 @@
     "express": "^4.17.1",
     "npm-cli": "^0.1.0",
     "start": "^5.1.0"
-  }
+  },
+  "devDependencies": {}
 }

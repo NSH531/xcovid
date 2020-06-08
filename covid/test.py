@@ -31,7 +31,7 @@ class TestCovidNet:
             batch_size=batch_size,
             class_mode='categorical',
             shuffle=False)
-        model = load_model(weights_path + 'model17.h5')
+        model = load_model(weights_path + 'model19.h5')
         model.layers.pop()
         predictions = model.predict_generator(test_generator, steps=len(test_generator), verbose=0)
         classes = list(np.argmax(predictions, axis=1))
@@ -55,4 +55,3 @@ class TestCovidNet:
 if __name__ == '__main__':
     predictions = TestCovidNet.test()
     print(predictions)
-    return predictions

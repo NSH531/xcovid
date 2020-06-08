@@ -1,5 +1,6 @@
 var x;
-x='<head><link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet"><style>.a1{font-family:"Architects Daughter", cursive;}</style></head><header><nav>  <h1 height="33" style="background-color:red;color:white">    <span style="border-style: ridge ">xcovid</span>    <span style="border-style:dotted"><a href="/data" style="color:#AADDFF">data</a></span></h1>  </nav></header>  <section>';
+const fs = require('fs');
+x='<head><link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet"><style>.a1{font-family:"Architects Daughter", cursive;}</style></head>';
 const dateTime = require('date-time');
  
 
@@ -26,8 +27,17 @@ const child = execFile('python3', ['J.PY'], (error, stdout, stderr) => {
  };
 
 app.get('/', (req, res) => {
-res.send(x);
+const readline = require('readline');
+const fs = require('fs');
 
+let data = fs.readFileSync('template.html', 'utf8');
+var a=data.split('%%')[0];
+var b=data.split('%%')[1];
+if(b==""){
+res.send(a);
+
+}else{
+res.send(a+x+b);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

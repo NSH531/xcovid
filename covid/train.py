@@ -23,6 +23,7 @@ class TrainCheXNet:
         self.input = Input(shape=(self.input_size, self.input_size, 3))
 
         # Final dense layer will have single output since this is binary classification problem
+        #self.output_classes = 3
         self.output_classes = 3
 
         # Following hyper-params are set as per the paper
@@ -35,8 +36,8 @@ class TrainCheXNet:
         #Following will be set by get_data_stats() based on the dataset
         self.w_class0 = None
         self.w_class1 = None
-        self.train_steps = None
-        self.val_steps = None
+        self.train_steps = 120
+        self.val_steps = 120
         self.model = None
 
     def get_data_stats(self, train_data_path, val_data_path, class_map):
@@ -47,8 +48,8 @@ class TrainCheXNet:
             cls_cnts[key] = len(imgs)
 
         # compute class distribution
-        self.w_class1 = float(cls_cnts[0])/sum(cls_cnts)
-        self.w_class0 = float(cls_cnts[1])/sum(cls_cnts)
+        #self.w_class1 = float(cls_cnts[0])/sum(cls_cnts)
+        #self.w_class0 = float(cls_cnts[1])/sum(cls_cnts)
 
         # For convenience at train time, compute number of steps required to complete an epoch
         val_img_cnt = 0
@@ -56,8 +57,8 @@ class TrainCheXNet:
             imgs = glob.glob(val_data_path + value + "/*.jpeg")
             val_img_cnt += len(imgs)
 
-        self.train_steps = (sum(cls_cnts) // self.batch_size) + 1
-        self.val_steps = (val_img_cnt // self.val_batch_size) + 1
+       # self.train_steps = (sum(cls_cnts) // self.batch_size) + 1
+        #self.val_steps = (val_img_cnt // self.val_batch_size) + 1
     def get_model(self):
         # DenseNet121 expects number of channels to be 3
         input = Input(shape=(self.input_size, self.input_size, 3))
@@ -72,7 +73,7 @@ class TrainCheXNet:
         xent = tf.keras.losses.BinaryCrossentropy(from_logits=False,reduction=tf.keras.losses.Reduction.NONE)
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
 
-        self.model.compile(optimizer='adam', loss='categorical_crossentropy')
+        self.model.compile(optimizer='Adagrad', loss='categorical_hinge')
         return self.model
 
     @staticmethod
@@ -116,9 +117,9 @@ class TrainCheXNet:
         # time the validation loss plateaus after an epoch
         # 2. pick the model with the lowest validation loss
 
-        checkpoint = ModelCheckpoint(weights_path + 'model19.h5', monitor='val_loss', verbose=1,
+        checkpoint = tf.keras.callbacks.ModelCheckpoint(weights_path + 'modelx12.h5', monitor='val_loss', verbose=1,
                                      save_best_only=True, mode='min')
-        reduceLROnPlat = ReduceLROnPlateau(monitor='val_loss', factor=self.decay_factor)
+        reduceLROnPlat = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=self.decay_factor)
 
         callbacks = [checkpoint, reduceLROnPlat]
 
@@ -128,7 +129,10 @@ class TrainCheXNet:
                             callbacks=callbacks,
                             validation_data=val_generator,
                             validation_steps=self.val_steps)
-	
+        model.summary()
+        model.save('modelx12.h5')
+        
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
@@ -136,11 +140,11 @@ if __name__ == '__main__':
                                      metavar="'imagenet' or 'last'",
                                      help="Train on imagenet or last model.")
     args = parser.parse_args()
-    train_data_path = "data/train/"
-    val_data_path = "data/val/"
-    class_map = {0:'normal', 1:'covid19',2:'pneumonia'}
-    epochs =   100
-    weights_path = "weights/"
+    train_data_path = "data/x/train/"
+    val_data_path = "data/x/val/"
+    class_map = {0:'normal-CT', 1:'covid19-CT',2:'stage1'}
+    epochs =   25
+    weights_path = "weights/x/"
 
     trainchexnet = TrainCheXNet()
     # Compute normal Vs Pneumonia class distribution
@@ -150,7 +154,8 @@ if __name__ == '__main__':
     if (args.weights == 'imagenet'):
         model = trainchexnet.get_model()
     elif (args.weights == 'last'):
-        model = load_model(weights_path + 'model19.h5')
+        model = load_model( 'modelx12.h5')
 
     # Train the model
     trainchexnet.train(train_data_path, val_data_path, epochs, weights_path)
+

@@ -73,7 +73,7 @@ class TrainCheXNet:
         xent = tf.keras.losses.BinaryCrossentropy(from_logits=False,reduction=tf.keras.losses.Reduction.NONE)
         # Note: default learning rate of 'adam' is 0.001 as required by the paper
 
-        self.model.compile(optimizer='Adagrad', loss='categorical_hinge')
+        self.model.compile(optimizer='adam', loss='categorical_crossentropy')
         return self.model
 
     @staticmethod
@@ -117,7 +117,7 @@ class TrainCheXNet:
         # time the validation loss plateaus after an epoch
         # 2. pick the model with the lowest validation loss
 
-        checkpoint = tf.keras.callbacks.ModelCheckpoint(weights_path + 'modelx12.h5', monitor='val_loss', verbose=1,
+        checkpoint = tf.keras.callbacks.ModelCheckpoint(weights_path + 'modelx112.h5', monitor='val_loss', verbose=1,
                                      save_best_only=True, mode='min')
         reduceLROnPlat = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=self.decay_factor)
 
@@ -130,7 +130,7 @@ class TrainCheXNet:
                             validation_data=val_generator,
                             validation_steps=self.val_steps)
         model.summary()
-        model.save('modelx12.h5')
+        model.save('modelx112.h5')
         
 
 if __name__ == '__main__':
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     train_data_path = "data/x/train/"
     val_data_path = "data/x/val/"
     class_map = {0:'normal-CT', 1:'covid19-CT',2:'stage1'}
-    epochs =   25
+    epochs =  50
     weights_path = "weights/x/"
 
     trainchexnet = TrainCheXNet()
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     if (args.weights == 'imagenet'):
         model = trainchexnet.get_model()
     elif (args.weights == 'last'):
-        model = load_model( 'modelx12.h5')
+        model = load_model('modelx112.h5')
 
     # Train the model
     trainchexnet.train(train_data_path, val_data_path, epochs, weights_path)

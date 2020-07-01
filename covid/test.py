@@ -31,13 +31,16 @@ class TestCovidNet:
             batch_size=batch_size,
             class_mode='categorical',
             shuffle=False)
-        model = load_model( 'modelx12.h5')
+        model = load_model( weights_path + 'modelx112.h5')
         model.layers.pop()
         predictions = model.predict_generator(test_generator, steps=len(test_generator), verbose=0)
         classes = list(np.argmax(predictions, axis=1))
         filenames = test_generator.filenames
         q='\n\n'
         right=0
+        r=[]
+        s1=0
+        si1=0
         wrong=0
         answer = []
         prediction = ''
@@ -49,45 +52,34 @@ class TestCovidNet:
             answer.append('\n')
             q=q+str(filenames[i])+'\n'
             q=q+'actual data:\t'+str(predictions[i])
-            t={(0,predictions[i][0]),(1,predictions[i][1]),(2,predictions[i][2])}
-            print (sorted(t))
+            #t={(0,predictions[i][0]),(1,predictions[i][1]),(2,predictions[i][2])}
+            #print (sorted(t))
             if((predictions[i][2]>predictions[i][1]) and (predictions[i][2]>predictions[i][0])):
                 prediction = 'stage1'
                 isPredictionCorrect = 'stage1' in filenames[i]
                 if(isPredictionCorrect):
                     right = right + 1
+                    s1=s1+1
                 else:
-                     if (prediction == 'normal'):
-                         falseNegatives = falseNegatives + 1
-                     elif ((prediction == 'covid')or(prediction=='stage1')):
-                         falsePositives = falsePositives + 1
-                     wrong = wrong + 1
-
-                      
-            else:
-
-
-                if(predictions[i][0]>predictions[i][1]):
-                    prediction = 'normal'
-                    isPredictionCorrect = 'Non-' in filenames[i]
+                    si1=si1+1
                 
-                else:
-                    prediction = 'covid'
-                    isPredictionCorrect = not('Non-' in filenames[i]) and not('stage1' in filenames[i])
+            else:
+                if((predictions[i][1]>predictions[i][2]) and (predictions[i][1]>predictions[i][0])):
+                    
+                    isPredictionCorrect = ('covid' in filenames[i])or('COVID' in filenames[i])
                     if(isPredictionCorrect):
                         right = right + 1
-                    else:
-                        if (prediction == 'normal'):
-                            falseNegatives = falseNegatives + 1
-                        elif (prediction == 'covid'):
-                            falsePositives = falsePositives + 1
-                        wrong = wrong + 1
-        q=q+'\nPrediction:\t'+prediction+'\nCorrect:\t'+str(isPredictionCorrect)
+                else:
+                    if((predictions[i][0]>predictions[i][2]) and (predictions[i][1]<predictions[i][0])):
+                        isPredictionCorrect = 'Non' in filenames[i]
+                        if(isPredictionCorrect):
+                            right = right + 1
+                
+
+        wrong = len(filenames)-right
+        q=q+'\nstage1 correct percent:'+str(100*s1/(s1+si1))
         q=q+'\nTrue:\t'+str(right)
         q=q+'\nFalse:\t'+str(wrong)
-        q=q+'\nFalse positives :\t'+str(falsePositives)
-        q=q+'\nFalse negatives :\t'+str(falseNegatives)
-        
         return q
 if __name__ == '__main__':
     predictions = TestCovidNet.test()

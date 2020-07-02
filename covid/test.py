@@ -66,7 +66,7 @@ class TestCovidNet:
             else:
                 if((predictions[i][1]>predictions[i][2]) and (predictions[i][1]>predictions[i][0])):
                     
-                    isPredictionCorrect = ((('covid' in filenames[i])or('COVID' in filenames[i])) and not('Non' in filenames[i]))
+                    isPredictionCorrect = ((('covid' in filenames[i])or('COVID' in filenames[i])or(('Covid' in filenames[i]))) and not('Non' in filenames[i]))
                     if(isPredictionCorrect):
                         right = right + 1
                 else:

@@ -40,6 +40,8 @@ class TestCovidNet:
         right=0
         r=[]
         s1=0
+        n=0
+        nw=0
         si1=0
         wrong=0
         answer = []
@@ -74,9 +76,12 @@ class TestCovidNet:
                         isPredictionCorrect = 'Non' in filenames[i]
                         if(isPredictionCorrect):
                             right = right + 1
-                
+                            n=n+1
+                        else:
+                            nw=nw+1         
 
         wrong = len(filenames)-right
+        q=q+'\nNormal correct percent:'+str(100*n/(n+nw))
         q=q+'\nstage1 correct percent:'+str(100*s1/(s1+si1))
         q=q+'\nTrue:\t'+str(right)
         q=q+'\nFalse:\t'+str(wrong)

@@ -56,33 +56,14 @@ class TestCovidNet:
             q=q+'actual data:\t'+str(predictions[i])
             #t={(0,predictions[i][0]),(1,predictions[i][1]),(2,predictions[i][2])}
             #print (sorted(t))
-            if((predictions[i][2]>predictions[i][1]) and (predictions[i][2]>predictions[i][0])):
-                prediction = 'stage1'
-                isPredictionCorrect = 'stage1' in filenames[i]
-                if(isPredictionCorrect):
-                    right = right + 1
-                    s1=s1+1
-                else:
-                    si1=si1+1
-                
+            if(predictions[i][1]>predictions[i][0]):
+                if( ("covid" in predictions[i]) or ("Covid" in predictions[i])or("COVID" in predictions[i])or("stage" in predictions[i])):
+                    right=right+1
             else:
-                if((predictions[i][1]>predictions[i][2]) and (predictions[i][1]>predictions[i][0])):
-                    
-                    isPredictionCorrect = ((('covid' in filenames[i])or('COVID' in filenames[i])or(('Covid' in filenames[i]))) and not('Non' in filenames[i]))
-                    if(isPredictionCorrect):
-                        right = right + 1
-                else:
-                    if((predictions[i][0]>predictions[i][2]) and (predictions[i][1]<predictions[i][0])):
-                        isPredictionCorrect = 'Non' in filenames[i]
-                        if(isPredictionCorrect):
-                            right = right + 1
-                            n=n+1
-                        else:
-                            nw=nw+1         
-
+                if("Non" in predictions[i]):
+                    right=right+1
+                
         wrong = len(filenames)-right
-        q=q+'\nNormal correct percent:'+str(100*n/(n+nw))
-        q=q+'\nstage1 correct percent:'+str(100*s1/(s1+si1))
         q=q+'\nTrue:\t'+str(right)
         q=q+'\nFalse:\t'+str(wrong)
         return q
